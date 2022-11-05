@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"gin-message-board/controllers"
-	auth "gin-message-board/middlewares"
+	"illini-board/controllers"
+	auth "illini-board/middlewares"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,12 +18,16 @@ func InitializeRoutes() *gin.Engine {
 	// 留言路由组
 	articleRoutes := router.Group("/message")
 	{
-		// route from Part 1 of the tutorial
 		articleRoutes.GET("/view/:message_id", controllers.GetMessage)
 
 		articleRoutes.GET("/create", controllers.ShowMessageCreationPage)
 
 		articleRoutes.POST("/create", controllers.CreateMessage)
+
+		//delete
+
+		//modify
+
 	}
 
 	// 用户路由组

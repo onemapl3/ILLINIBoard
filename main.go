@@ -1,9 +1,8 @@
 package main
 
 import (
-	"gin-message-board/config"
-	"gin-message-board/database"
-	"gin-message-board/routers"
+	"illini-board/db"
+	"illini-board/routers"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,8 +10,10 @@ import (
 var router *gin.Engine
 
 func main() {
-	config.Init()
-	database.Init()
+	if err := db.InitMySql(); err != nil {
+		panic(err)
+	}
+
 	var router = routers.InitializeRoutes()
 
 	// 启动服务

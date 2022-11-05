@@ -1,38 +1,36 @@
-package database
+package db
 
 import (
 	"errors"
 	"fmt"
-	"gin-message-board/models"
-	"strings"
-
-	"github.com/spf13/viper"
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"illini-board/config"
+	"illini-board/models"
+	"strings"
 )
 
 var db *gorm.DB
 
-// Init 初始化postgresql数据库设置
-func Init() {
-	var dsn = fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Shanghai",
-		viper.GetString("database.server"),
-		viper.GetString("database.username"),
-		viper.GetString("database.password"),
-		viper.GetString("database.dbname"),
-		viper.GetInt("database.ports"),
-	)
-	var err error
-	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		panic(fmt.Errorf("Fatal database error: \n", err))
-	}
+// 初始化連線資料庫
+func InitMySql() (err error) {
+	var c *config.Conf
 
-	err = db.AutoMigrate(&models.Message{}, &models.User{})
-	if err != nil {
-		panic(err)
-	}
+	//獲取yaml配置引數
+	conf := c.GetConf()
+
+	//將yaml配置引數拼接成連線資料庫的url
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		conf.UserName,
+		conf.Password,
+		conf.Host,
+		conf.Port,
+		conf.DbName,
+	)
+
+	//連線資料庫
+	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	return err
 }
 
 // GetDB 返回数据库指针
@@ -65,12 +63,12 @@ func CreateNewMessage(title, content string) (models.Message, error) {
 func RegisterNewUser(username, password string) error {
 	// 判断密码是否为空
 	if strings.TrimSpace(password) == "" {
-		return errors.New("密码不能为空")
+		return errors.New("Password should not be empty")
 	}
 	// 判断用户名是否可用
 	userAvailable, err := IsUsernameAvailable(username)
 	if err == nil && !userAvailable {
-		return errors.New("用户名不可用")
+		return errors.New("Username Unavailable")
 	}
 	// 写入数据库
 	user := models.User{Username: username, Password: password}

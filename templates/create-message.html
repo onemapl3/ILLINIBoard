@@ -1,6 +1,6 @@
 {{ template "header.html" .}}
 
-<h1>创建留言</h1>
+<h1>Create A Post</h1>
 
 
 <div class="panel panel-default col-sm-12">
@@ -13,14 +13,14 @@
 
         <form class="form" action="/message/create" method="POST">
             <div class="form-group">
-                <label for="title">留言标题</label>
-                <input type="text" class="form-control" id="title" name="title" placeholder="标题">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" id="title" name="title" placeholder="Title">
             </div>
             <div class="form-group">
-                <label for="content">留言内容</label>
-                <textarea name="content" class="form-control" rows="10" id="content" laceholder="内容"></textarea>
+                <label for="content">Content</label>
+                <textarea name="content" class="form-control" rows="10" id="content" laceholder="Content"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">提交</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
 </div>

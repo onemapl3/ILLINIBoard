@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"fmt"
-	"gin-message-board/database"
+	"illini-board/db"
 
 	"net/http"
 	"strconv"
@@ -12,12 +12,12 @@ import (
 
 // ShowIndexPage 从数据库读取所有留言并传到templates/index.html
 func ShowIndexPage(c *gin.Context) {
-	messages, err := database.GetAllMessages()
+	messages, err := db.GetAllMessages()
 	if err != nil {
-		panic(fmt.Errorf("数据库读取留言错误: %s \n", err))
+		panic(fmt.Errorf("Database Load Err: %s \n", err))
 	}
 	render(c, gin.H{
-		"title":   "主页",
+		"title":   "Homepage",
 		"payload": messages}, "index.html",
 	)
 
@@ -36,9 +36,9 @@ func GetMessage(c *gin.Context) {
 	}
 
 	// 检查留言在数据库中是否存在
-	message, err := database.GetMessageByID(messageID)
+	message, err := db.GetMessageByID(messageID)
 	if err != nil {
-		panic(fmt.Errorf("留言在数据库中不存在：%s \n", c.AbortWithError(http.StatusNotFound, err).Error()))
+		panic(fmt.Errorf("Post not exists：%s \n", c.AbortWithError(http.StatusNotFound, err).Error()))
 	}
 	c.HTML(
 		http.StatusOK,
@@ -74,7 +74,7 @@ func render(c *gin.Context, data gin.H, templateName string) {
 // ShowMessageCreationPage 展示留言创建页面
 func ShowMessageCreationPage(c *gin.Context) {
 	render(c, gin.H{
-		"title": "创建新留言"}, "create-message.html")
+		"title": "Create New Post"}, "create-message.html")
 }
 
 // CreateMessage 留言提交页面
@@ -83,12 +83,12 @@ func CreateMessage(c *gin.Context) {
 	title := c.PostForm("title")
 	content := c.PostForm("content")
 	// 将新的留言写入数据库
-	m, err := database.CreateNewMessage(title, content)
+	m, err := db.CreateNewMessage(title, content)
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 	}
 	render(c, gin.H{
-		"title":   "提交成功",
+		"title":   "Submit Successfully",
 		"payload": m}, "submission-successful.html")
 
 }

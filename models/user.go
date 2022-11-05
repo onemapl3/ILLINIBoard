@@ -10,16 +10,18 @@ import (
 // User 用户结构体
 type User struct {
 	gorm.Model
-	Username string `json:"username"`
-	Password string `json:"-"`
+	Username   string `json:"username"`
+	Password   string `json:"-"`
+	UserEmail  string `json:"user_email"`
+	Permission string `json:"permission_id"`
 }
 
 /*
-	硬编码方式返回留言
+硬编码方式返回留言
 */
 var UserList = []User{
-	User{Username: "用户1", Password: "yonghu11111"},
-	User{Username: "用户2", Password: "yonghu22222"},
+	User{Username: "user1", Password: "yonghu11111", UserEmail: "11@23.com", Permission: "1"},
+	User{Username: "user2", Password: "yonghu22222", UserEmail: "11@24.com", Permission: "2"},
 }
 
 // IsUserValid 检查用户名和密码
@@ -35,9 +37,9 @@ func IsUserValid(username, password string) bool {
 // 注册新用户
 func RegisterNewUser(username, password string) (*User, error) {
 	if strings.TrimSpace(password) == "" {
-		return nil, errors.New("密码不能为空")
+		return nil, errors.New("Password should not be empty!")
 	} else if !IsUsernameAvailable(username) {
-		return nil, errors.New("用户名不可用")
+		return nil, errors.New("Username unavailable!")
 	}
 
 	u := User{Username: username, Password: password}

@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"gin-message-board/database"
+	"illini-board/db"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -25,11 +25,11 @@ func Register(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 
-	err := database.RegisterNewUser(username, password)
+	err := db.RegisterNewUser(username, password)
 	if err != nil {
 		// 如果用户名或密码不合法展示错误再登录界面
 		c.HTML(http.StatusBadRequest, "register.html", gin.H{
-			"ErrorTitle":   "注册失败",
+			"ErrorTitle":   "Register failed",
 			"ErrorMessage": err.Error()})
 	}
 	token := GenerateSessionToken()
@@ -38,14 +38,14 @@ func Register(c *gin.Context) {
 	// 设置"is_logged_"=true
 	c.Set("is_logged_in", true)
 
-	render(c, gin.H{"title": "成功注册，登录成功"}, "login-successful.html")
+	render(c, gin.H{"title": "Registered, Login Successful!"}, "login-successful.html")
 
 }
 
 // ShowLoginPage 展示登录界面
 func ShowLoginPage(c *gin.Context) {
 	render(c, gin.H{
-		"title": "登录",
+		"title": "Login",
 	}, "login.html")
 }
 
@@ -55,17 +55,17 @@ func PerformLogin(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 	// 判断是否合法
-	valid, err := database.IsUserValid(username, password)
+	valid, err := db.IsUserValid(username, password)
 	if err != nil || valid {
 		c.HTML(http.StatusBadRequest, "login.html", gin.H{
-			"ErrorTitle":   "登录失败",
+			"ErrorTitle":   "Login failed",
 			"ErrorMessage": "Invalid credentials provided"})
 	}
 	// 生成token并设置
 	token := GenerateSessionToken()
 	c.SetCookie("token", token, 3600, "", "", false, true)
 	render(c, gin.H{
-		"title": "成功登录"}, "login-successful.html")
+		"title": "Login Successfully"}, "login-successful.html")
 
 }
 

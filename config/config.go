@@ -2,17 +2,31 @@ package config
 
 import (
 	"fmt"
-
-	"github.com/spf13/viper"
+	"gopkg.in/yaml.v2"
+	"io/ioutil"
 )
 
-func Init() {
-	// 设置config文件名称，类型，路径
-	viper.SetConfigName("config")
-	viper.SetConfigType("toml")
-	viper.AddConfigPath("config/")
-	err := viper.ReadInConfig()
+type Conf struct {
+	Host     string `yaml:"host"`
+	UserName string `yaml:"username"`
+	Password string `yaml:"password"`
+	DbName   string `yaml:"dbname"`
+	Port     string `yaml:"port"`
+}
+
+func (c *Conf) GetConf() *Conf {
+	//讀取config/connect.yaml檔案
+	yamlFile, err := ioutil.ReadFile("config/config.yaml")
+
+	//若出現錯誤，列印錯誤訊息
 	if err != nil {
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+		fmt.Println(err.Error())
 	}
+
+	//將讀取的字串轉換成結構體conf
+	err = yaml.Unmarshal(yamlFile, c)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	return c
 }
