@@ -1,0 +1,32 @@
+<!--register.html-->
+
+{{ template "header.html" .}}
+
+<h1>注册</h1>
+
+<div class="panel panel-default col-sm-6">
+    <div class="panel-body">
+        <!--如果有错误 显示-->
+        {{ if .ErrorTitle}}
+        <p class="bg-danger">
+            {{.ErrorTitle}}: {{.ErrorMessage}}
+        </p>
+        {{end}}
+        <!--注册表单-->
+        <form class="form" action="/u/register" method="POST">
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-primary">注册</button>
+        </form>
+    </div>
+</div>
+
+
+
+{{ template "footer.html" .}}

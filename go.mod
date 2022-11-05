@@ -1,0 +1,12 @@
+module gin-message-board
+
+go 1.15
+
+require (
+	github.com/gin-gonic/gin v1.6.3
+	github.com/go-sql-driver/mysql v1.5.0
+	github.com/spf13/viper v1.7.1
+	golang.org/x/tools v0.1.0 // indirect
+	gorm.io/driver/postgres v1.0.7
+	gorm.io/gorm v1.20.12
+)

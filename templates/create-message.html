@@ -1,0 +1,29 @@
+{{ template "header.html" .}}
+
+<h1>创建留言</h1>
+
+
+<div class="panel panel-default col-sm-12">
+    <div class="panel-body">
+        {{ if .ErrorTitle}}
+        <p class="bg-danger">
+            {{.ErrorTitle}}: {{.ErrorMessage}}
+        </p>
+        {{end}}
+
+        <form class="form" action="/message/create" method="POST">
+            <div class="form-group">
+                <label for="title">留言标题</label>
+                <input type="text" class="form-control" id="title" name="title" placeholder="标题">
+            </div>
+            <div class="form-group">
+                <label for="content">留言内容</label>
+                <textarea name="content" class="form-control" rows="10" id="content" laceholder="内容"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">提交</button>
+        </form>
+    </div>
+</div>
+
+
+{{ template "footer.html" .}}

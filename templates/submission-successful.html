@@ -1,0 +1,11 @@
+<!--submission-successful.html-->
+
+{{ template "header.html" .}}
+
+<div>
+    <strong>留言成功提交</strong>
+
+    <a href="/message/view/{{.payload.ID}}">{{.payload.Title}}</a>
+</div>
+
+{{ template "footer.html" .}}

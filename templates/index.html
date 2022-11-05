@@ -1,0 +1,21 @@
+<!--index.html-->
+
+
+{{ template "header.html" .}}
+
+<h1>留言版</h1>
+
+<!--循环留言列表-->
+{{range .payload }}
+<!--根据留言的ID创建链接-->
+<a href="/message/view/{{.ID}}">
+    <!--展示留言内容-->
+    <h2>{{.Title}}</h2>
+</a>
+<p>{{.Content}}</p>
+
+
+{{end}}
+
+<!--页尾-->
+{{ template "footer.html" .}}
